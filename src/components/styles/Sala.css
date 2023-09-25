@@ -1,0 +1,128 @@
+.usuarios {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.user {
+    background-color: #E9FCF2;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.cantidad {
+    display: flex;
+    justify-content: end;
+}
+
+.cantidad>div {
+    margin-bottom: 5px;
+    color: white;
+    padding: 2px 20px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.cantidad>div>i {
+    font-size: 1.1rem;
+}
+
+.cantidad>div>span {
+    margin-left: 5px;
+    font-size: 1.4rem;
+}
+
+.btn-empezar {
+    border: none;
+    padding: 7px 15px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.sala-espera {
+    background-image: url('../../assets/sala.png');
+    background-size: contain;
+}
+
+.inp-pregunta {
+    outline: none;
+    width: 100%;
+    border: 1px solid #1368CE;
+    padding: 10px;
+}
+
+.btn-continuar {
+    background-color: #26890C;
+    border: none;
+    color: white;
+    padding: 7px 15px;
+    border-radius: 5px;
+}
+
+.pregunta {
+    border: 1px solid #1368CE;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.pregunta textarea {
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.acordeon {
+    font-size: 0.9rem;
+}
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal .box {
+    width: 500px;
+    height: 450px;
+    border-radius: 10px;
+    background-color: #EBEBED;
+    padding: 20px;
+    text-align: center;
+}
+
+.modal img {
+    margin-top: 10px;
+    background-color: rebeccapurple ;
+    width: 70%;
+}
+.modal button{
+    margin: 10px;
+    background-color: #26890C;
+    border: none;
+    color: white;
+    padding: 7px 15px;
+    border-radius: 5px;
+}

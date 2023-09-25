@@ -1,0 +1,29 @@
+.card input {
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 10px;
+    text-align: center;
+    background-color: #F7F8F9;
+}
+
+.card button {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    color: white;
+    margin: 5px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: filter 0.3s ease;
+}
+.card .unirse{
+    background-color: #26890C;
+}
+.card .crear{
+    background-color: #E9FCF2;
+    color: #26890C;
+}
+.card button:hover{
+    filter: brightness(0.95);
+}
