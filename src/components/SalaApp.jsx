@@ -22,7 +22,7 @@ export const SalaApp = () => {
 
 
   useEffect(() => {
-    let newSocket = io('https://preguntas-anonimas-app-07ceade6dd4e.herokuapp.com/' + codigo);
+    let newSocket = io('https://app-preguntas-anonimas-8a8d30c670d7.herokuapp.com/' + codigo);
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
