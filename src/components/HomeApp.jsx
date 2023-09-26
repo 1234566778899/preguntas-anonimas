@@ -5,7 +5,7 @@ import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-const socket = io('https://app-preguntas-anonimas-8a8d30c670d7.herokuapp.com');
+const socket = io('https://preguntitas-d87cda84ac9f.herokuapp.com');
 
 export const HomeApp = () => {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const HomeApp = () => {
 
     return (
         <>
-            <NavbarApp title={'PREGUNTAS ANÓNIMAS'} />
+            <NavbarApp title={'PREGUNTAS ANÓNIMAS v2'} />
             <div className="container">
                 <br />
                 <div className="row">
