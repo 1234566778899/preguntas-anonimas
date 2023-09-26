@@ -173,7 +173,7 @@ export const SalaApp = () => {
                 <div className='cantidad'>
                   <div>
                     <i className="fa-solid fa-user"></i>
-                    <span>{usuarios.length}</span>
+                    <span>{usuarios ? usuarios.length : '0'}</span>
                   </div>
                 </div>
               </div>
