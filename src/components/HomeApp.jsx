@@ -25,7 +25,7 @@ export const HomeApp = () => {
         if (textCodigo.current.value.length != 4) {
             setMensajeAlerta('Ingrese un código valido');
             setCodigoValido(false);
-        }else{
+        } else {
             socket.emit('unirse', textCodigo.current.value);
         }
     }
@@ -33,7 +33,7 @@ export const HomeApp = () => {
         const hanfleFocus = () => {
             setCodigoValido(true);
         }
-        textCodigo.current.addEventListener('focus', hanfleFocus);
+
         socket.on('validar', data => {
             if (data) {
                 navigate(`/sala/${textCodigo.current.value}`);
@@ -45,30 +45,29 @@ export const HomeApp = () => {
 
         return () => {
             socket.off('validar');
-            if (textCodigo.current) {
-                textCodigo.current.removeEventListener('focus');
-            }
         }
     }, [])
 
     return (
         <>
-            <NavbarApp title={'PREGUNTAS ANÓNIMAS v2'} />
-            <div className="container">
-                <br />
-                <div className="row">
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4 p-1">
-                        <div className="card p-4">
-                            <h1 className="text-center">EMPEZAR A JUEGAR</h1>
-                            <br />
-                            <input ref={textCodigo} type="text" placeholder='Ingrese el código de la sala...' />
-                            {!codigoValido ? (<div className="alert alert-danger">{mensajeAlerta}</div>) : ''}
-                            <button className='unirse mt-2' onClick={() => unirse()}>UNIRSE</button>
-                            <button className='crear' onClick={() => crearSala()}>CREAR</button>
+            <div className="box-home">
+                <NavbarApp title={'PREGUNTAS ANÓNIMAS'} />
+                <div className="container">
+                    <br />
+                    <div className="row">
+                        <div className="col-md-4"></div>
+                        <div className="col-md-4 p-1">
+                            <div className="card-home p-4">
+                                <h3 className="text-center">EMPEZAR A JUEGAR</h3>
+                                <br />
+                                <input className='inp-primary' ref={textCodigo} type="text" placeholder='Ingrese el código de la sala...' />
+                                {!codigoValido ? (<div className="alert alert-danger">{mensajeAlerta}</div>) : ''}
+                                <button className='unirse mt-2' onClick={() => unirse()}><i class="me-2 fa-solid fa-right-to-bracket"></i>UNIRSE </button>
+                                <button className='crear' onClick={() => crearSala()}>CREAR <i class="ms-2 fa-solid fa-circle-plus"></i></button>
+                            </div>
                         </div>
+                        <div className="col-md-4"></div>
                     </div>
-                    <div className="col-md-4"></div>
                 </div>
             </div>
         </>

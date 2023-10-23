@@ -1,29 +1,67 @@
-.card input {
+.card-home {
+    font-family: 'Maven Pro', sans-serif;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.card-home h3 {
+    font-weight: bold;
+    color: #dfff50;
+}
+
+.inp-primary {
     width: 100%;
     outline: none;
     border: none;
     padding: 10px;
     text-align: center;
-    background-color: #F7F8F9;
+    color: white;
+    border-radius: 3px;
+    background-color: #AA6B9C;
+    border: 2px solid white;
 }
 
-.card button {
+.inp-primary::placeholder {
+    color: #EFE2EB;
+}
+
+.card-home button {
     width: 100%;
     padding: 5px;
     border: none;
-    color: white;
+    color: #301A6B;
     margin: 5px;
     border-radius: 5px;
     font-weight: 600;
     transition: filter 0.3s ease;
+    border-bottom: 4px solid #301A6B;
 }
-.card .unirse{
-    background-color: #26890C;
+
+.btn-first {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    color: #301A6B;
+    margin: 5px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: filter 0.3s ease;
+    border-bottom: 4px solid #301A6B;
 }
-.card .crear{
+
+.card-home .unirse {
+    background-color: #FFFFFF;
+}
+
+.card-home .crear {
     background-color: #E9FCF2;
-    color: #26890C;
+    color: #27AE60;
 }
-.card button:hover{
+
+.card-home button:hover {
     filter: brightness(0.95);
+}
+
+.box-home {
+    height: 100vh;
+    background-image: linear-gradient(to bottom, #6B239C, #B93E68);
 }
