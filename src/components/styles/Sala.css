@@ -147,6 +147,7 @@
 
 .box-sala {
     height: 100vh;
+    overflow-y: scroll;
     background-image: linear-gradient(to bottom, #6928CF, #2EA3CF);
 }
 
