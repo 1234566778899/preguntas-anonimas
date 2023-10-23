@@ -6,12 +6,15 @@ import imgEspera from '../assets/esperando.gif'
 import { AccordionDetails, AccordionSummary, Accordion } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { io } from 'socket.io-client'
+import { CONFI } from '../config'
+import { useForm } from 'react-hook-form'
+import { SendQuestionApp } from './SendQuestionApp'
 
 export const SalaApp = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { codigo } = useParams();
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
-  const textName = useRef();
   const textPregunta = useRef();
   const [codigoValido, setCodigoValido] = useState(false);
   const [titleNav, setTitleNav] = useState(`${'PIN DEL JUEGO: ' + codigo}`)
@@ -21,8 +24,9 @@ export const SalaApp = () => {
   const [respuestas, setrespuestas] = useState({})
 
 
+
   useEffect(() => {
-    let newSocket = io('https://preguntitas-d87cda84ac9f.herokuapp.com/' + codigo);
+    let newSocket = io(`${CONFI.uri}/` + codigo);
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -90,17 +94,13 @@ export const SalaApp = () => {
   const obtenerRespuesta = (key, value) => {
     setrespuestas(aux => ({ ...aux, [key]: value }));
   }
-  const enviarNombre = () => {
-    if (textName.current.value != "") {
-      socket.emit('enviar-nombre', textName.current.value);
-      setPantalla([false, true, false, false, false, false]);
-    }
+  const enviarNombre = (data) => {
+    socket.emit('enviar-nombre', data.name);
+    setPantalla([false, true, false, false, false, false]);
   }
-  const enviarPregunta = () => {
-    if (textPregunta.current.value != "") {
-      socket.emit('enviar-pregunta', textPregunta.current.value);
-      setPantalla([false, false, false, true, false, false]);
-    }
+  const enviarPregunta = (data) => {
+    socket.emit('enviar-pregunta', data.question);
+    setPantalla([false, false, false, true, false, false]);
   }
   const enviarRespuestas = () => {
     for (let key in respuestas) {
@@ -140,8 +140,13 @@ export const SalaApp = () => {
                   <div className="card-home p-4">
                     <h3 className="text-center">EMPEZAR A JUEGAR</h3>
                     <br />
-                    <input className='inp-primary' ref={textName} type="text" placeholder='Ingrese su nombre...' />
-                    <button className='unirse mt-2' onClick={() => enviarNombre()}>CONTINUAR</button>
+                    <form onSubmit={handleSubmit(enviarNombre)}>
+                      <input className='inp-primary' {...register('name', { required: true })} type="text" placeholder='Ingrese su nombre...' />
+                      {
+                        errors.name && <p className='alert alert-danger mt-1'>Campo obligatorio</p>
+                      }
+                      <button className='unirse mt-2'>CONTINUAR</button>
+                    </form>
                   </div>
                 </div>
                 <div className="col-md-4"></div>
@@ -182,14 +187,7 @@ export const SalaApp = () => {
             }
             {
               pantallas[2] ? (
-                <div className="card-home card-preguntar col-md-4 sala-pregunta py-3 mt-3">
-                  <br />
-                  <p>Realiza una pregunta anónima</p>
-                  <textarea  ref={textPregunta} className='inp-pregunta'></textarea>
-                  <div className='mt-3 text-center'>
-                    <button className='btn-continuar' onClick={() => enviarPregunta()}>Continuar</button>
-                  </div>
-                </div>
+                <SendQuestionApp sendQuestion={enviarPregunta} />
               ) : ''
             }
             {
@@ -225,24 +223,24 @@ export const SalaApp = () => {
                 <div className="col-md-4 my-2">
                   <br />
                   <h1 className="text-center text-white">RESULTADOS</h1>
+                  <br />
                   {
-                    usuarios.map(user => (
-                      <Accordion className='acordeon' key={user.id}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                          {user.pregunta}
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <ul>
-                            {
-                              resultados.map((result, index) => (
-                                <li key={user.id + result[user.id] + index}>{result[user.id] ? result[user.id] : ''}</li>
-                              ))
-                            }
-                          </ul>
-                        </AccordionDetails>
-                      </Accordion>
+                    usuarios.map((user, i) => (
+                      <div key={user.id} className='box-question mt-2'>
+                        <div className='head-question'>
+                          {i + 1})  {user.pregunta}
+                        </div>
+                        <div className='body-answers'>
+                          {
+                            resultados.map((result, index) => (
+                              <span key={user.id + result[user.id] + index}>{result[user.id] ? `${result[user.id]}` : ''}</span>
+                            ))
+                          }
+                        </div>
+                      </div>
                     ))
                   }
+
                   <div className="text-center">
                     <button className='mt-2 btn-first' onClick={() => iniciarNuevo()}>Iniciar de nuevo</button>
                   </div>
