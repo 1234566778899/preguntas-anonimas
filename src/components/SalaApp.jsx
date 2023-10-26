@@ -3,8 +3,6 @@ import './styles/Sala.css'
 import { NavbarApp } from './NavbarApp'
 import { useNavigate, useParams } from 'react-router-dom'
 import imgEspera from '../assets/esperando.gif'
-import { AccordionDetails, AccordionSummary, Accordion } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { io } from 'socket.io-client'
 import { CONFI } from '../config'
 import { useForm } from 'react-hook-form'
@@ -15,7 +13,6 @@ export const SalaApp = () => {
   const { codigo } = useParams();
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
-  const textPregunta = useRef();
   const [codigoValido, setCodigoValido] = useState(false);
   const [titleNav, setTitleNav] = useState(`${'PIN DEL JUEGO: ' + codigo}`)
   const [pantallas, setPantalla] = useState([true, false, false, false, false, false]);
@@ -41,7 +38,8 @@ export const SalaApp = () => {
   useEffect(() => {
     if (socket) {
       socket.on('lista-usuarios', data => {
-        setUsuarios(data);
+
+        setUsuarios(desordenar(data));
       })
 
       socket.on('empezar', () => {
@@ -49,15 +47,15 @@ export const SalaApp = () => {
       })
 
       socket.on('responder-preguntas', (data) => {
-        setUsuarios(data);
+        setUsuarios(desordenar(data));
         setPantalla([false, false, false, false, true, false]);
       })
 
       socket.on('resultados', (data) => {
         setPantalla([false, false, false, false, false, true]);
-        setUsuarios(data);
+        setUsuarios(desordenar(data));
         let r = data.map(user => user.results);
-        setResultados(r);
+        setResultados(desordenar(r));
       })
 
       socket.on('reiniciar', () => {
@@ -112,6 +110,9 @@ export const SalaApp = () => {
   }
   const iniciarNuevo = () => {
     socket.emit('reiniciar');
+  }
+  const desordenar = (arr) => {
+    return arr.sort(() => Math.random() - 0.5);
   }
   return (
     <>
