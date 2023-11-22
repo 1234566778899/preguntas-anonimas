@@ -45,6 +45,10 @@ export const SalaApp = () => {
       socket.on('empezar', () => {
         setPantalla([false, false, true, false, false, false]);
       })
+      socket.on('esperar', () => {
+        alert('Debes esperar que termine la partida');
+        navigate('/home');
+      })
 
       socket.on('responder-preguntas', (data) => {
         setUsuarios(desordenar(data));

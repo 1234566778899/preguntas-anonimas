@@ -1,4 +1,4 @@
 export const CONFI = {
-    uri: 'https://preguntitas-d87cda84ac9f.herokuapp.com'
+    uri: 'preguntas-anonimas.azurewebsites.net'
     //uri: 'http://localhost:4000'
 }
