@@ -19,26 +19,11 @@ export const HomeApp = () => {
         for (let i = 0; i < 4; i++) {
             codigo += ('' + Math.floor(Math.random() * 10));
         }
-        socket.emit('crear-sala', codigo);
-        navigate(`/sala/${codigo}`);
+        navigate(`/username/${codigo}`);
     }
     const unirse = (data) => {
-        socket.emit('unirse', data.code);
+        navigate(`/username/${data.code}`);
     }
-    useEffect(() => {
-        socket.on('validar', data => {
-            if (data.valid) {
-                navigate(`/sala/${data.code}`);
-            } else {
-                showInfoToast('No existe un sala con ese código');
-            }
-        })
-
-        return () => {
-            socket.off('validar');
-        }
-    }, [])
-
     return (
         <>
             <div className="box-home">
@@ -57,7 +42,7 @@ export const HomeApp = () => {
                                             length: value => value.length === 4 || 'Código no válido'
                                         }
                                     })} className='inp-primary' type="text" placeholder='Ingrese el código de la sala...' />
-                                    {errors.code && <p className='alert alert-danger mt-1'>{errors.code.message}</p>}
+                                    {errors.code && <p className='text-danger mt-1'>Debe ingresar el código</p>}
                                     <button className='unirse mt-2'><i className="me-2 fa-solid fa-right-to-bracket"></i>UNIRSE </button>
                                 </form>
                                 <button className='crear' onClick={() => crearSala()}>CREAR <i className="ms-2 fa-solid fa-circle-plus"></i></button>

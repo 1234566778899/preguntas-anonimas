@@ -7,29 +7,38 @@ import { io } from 'socket.io-client'
 import { CONFI } from '../config'
 import { useForm } from 'react-hook-form'
 import { SendQuestionApp } from './SendQuestionApp'
+import { showInfoToast } from '../utils'
 
 export const SalaApp = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { codigo } = useParams();
   const navigate = useNavigate();
   const [socket, setSocket] = useState(null);
-  const [codigoValido, setCodigoValido] = useState(false);
+  const [codigoValido, setCodigoValido] = useState(true);
   const [titleNav, setTitleNav] = useState(`${'PIN DEL JUEGO: ' + codigo}`)
   const [pantallas, setPantalla] = useState([true, false, false, false, false, false]);
   const [usuarios, setUsuarios] = useState([]);
   const [resultados, setResultados] = useState([]);
+  const [preguntas, setPreguntas] = useState([]);
   const [respuestas, setrespuestas] = useState({})
-
-
+  const [cantidadPreguntas, setcantidadPreguntas] = useState(0);
+  const [cantidadRespuestas, setcantidadRespuestas] = useState(0);
+  const [numEspera, setNumEspera] = useState(1);
 
   useEffect(() => {
-    let newSocket = io(`${CONFI.uri}/` + codigo);
+    let newSocket = io(`${CONFI.uri}`);
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
       setCodigoValido(true);
     });
 
+    if (localStorage.getItem('name')) {
+      newSocket.emit('enviar-nombre', { codigo, name: localStorage.getItem('name') });
+      setPantalla([false, true, false, false, false, false]);
+    } else {
+      navigate(`/username/${codigo}`);
+    }
     return () => {
       newSocket.disconnect();
     }
@@ -38,10 +47,8 @@ export const SalaApp = () => {
   useEffect(() => {
     if (socket) {
       socket.on('lista-usuarios', data => {
-
-        setUsuarios(desordenar(data));
+        setUsuarios(data);
       })
-
       socket.on('empezar', () => {
         setPantalla([false, false, true, false, false, false]);
       })
@@ -51,19 +58,31 @@ export const SalaApp = () => {
       })
 
       socket.on('responder-preguntas', (data) => {
-        setUsuarios(desordenar(data));
+        setPreguntas(data);
         setPantalla([false, false, false, false, true, false]);
       })
 
       socket.on('resultados', (data) => {
         setPantalla([false, false, false, false, false, true]);
-        setUsuarios(desordenar(data));
-        let r = data.map(user => user.results);
-        setResultados(desordenar(r));
+        setResultados(desordenar(data));
       })
 
       socket.on('reiniciar', () => {
         setPantalla([false, true, false, false, false, false]);
+      })
+      socket.on('cantidad-preguntas', (data) => {
+        setcantidadPreguntas(data);
+      })
+      socket.on('cantidad-respuestas', (data) => {
+        setcantidadRespuestas(data);
+      })
+      socket.on('nombre-repetido', () => {
+        showInfoToast('Usuario existente');
+        navigate(`/username/${codigo}`);
+      })
+      socket.on('en-juego', () => {
+        showInfoToast('Debe esperar a que la partida termine');
+        navigate('/home');
       })
     }
     return () => {
@@ -73,6 +92,10 @@ export const SalaApp = () => {
         socket.off('responder-preguntas');
         socket.off('resultados');
         socket.off('reiniciar');
+        socket.off('nombre-repetido');
+        socket.off('cantidad-preguntas');
+        socket.off('cantidad-respuestas');
+        socket.off('en-juego');
       }
     }
   }, [socket])
@@ -96,27 +119,31 @@ export const SalaApp = () => {
   const obtenerRespuesta = (key, value) => {
     setrespuestas(aux => ({ ...aux, [key]: value }));
   }
-  const enviarNombre = (data) => {
-    socket.emit('enviar-nombre', data.name);
-    setPantalla([false, true, false, false, false, false]);
-  }
   const enviarPregunta = (data) => {
     socket.emit('enviar-pregunta', data.question);
     setPantalla([false, false, false, true, false, false]);
+    setNumEspera(1);
   }
   const enviarRespuestas = () => {
-    for (let key in respuestas) {
-      if (respuestas[key] == "") return;
+    for (let p of preguntas) {
+      if (!respuestas[p.id] || respuestas[p.id] == "") return showInfoToast('Debes completar todos los campos');
     }
-
     setPantalla([false, false, false, true, false, false]);
     socket.emit('enviar-respuestas', respuestas);
+    setNumEspera(2);
+  }
+  const cambiarNombre = () => {
+    navigate(`/username/${codigo}`);
   }
   const iniciarNuevo = () => {
     socket.emit('reiniciar');
   }
   const desordenar = (arr) => {
     return arr.sort(() => Math.random() - 0.5);
+  }
+  const salirSala = () => {
+    localStorage.setItem('name', '');
+    navigate('/home');
   }
   return (
     <>
@@ -135,30 +162,6 @@ export const SalaApp = () => {
             </div>
           ) : ''
         }
-        {
-          pantallas[0] ? (
-            <div className="container">
-              <br />
-              <div className="row">
-                <div className="col-md-4"></div>
-                <div className="col-md-4 p-1">
-                  <div className="card-home p-4">
-                    <h3 className="text-center">EMPEZAR A JUEGAR</h3>
-                    <br />
-                    <form onSubmit={handleSubmit(enviarNombre)}>
-                      <input className='inp-primary' {...register('name', { required: true })} type="text" placeholder='Ingrese su nombre...' />
-                      {
-                        errors.name && <p className='alert alert-danger mt-1'>Campo obligatorio</p>
-                      }
-                      <button className='unirse mt-2'>CONTINUAR</button>
-                    </form>
-                  </div>
-                </div>
-                <div className="col-md-4"></div>
-              </div>
-            </div>
-          ) : ''
-        }
         <div className="container">
           <div className="row">
             <div className="col-md-4"></div>
@@ -168,10 +171,13 @@ export const SalaApp = () => {
                 <div className="col-md-4 bg-white sala-espera">
                   <div className="text-end">
                     <br />
-                    <button className='btn-empezar' onClick={() => socket.emit('empezar')}>Empezar</button>
+                    <div className="d-flex justify-content-between">
+                      <button className='btn-empezar' onClick={() => salirSala()}>Salir</button>
+                      <button className='btn-empezar' onClick={() => socket.emit('empezar')}>Empezar</button>
+                    </div>
                   </div>
                   <br />
-                  <h3 className='text-center text-white fw-bold'>Esperando amigos...</h3>
+                  <h3 className='text-center text-white fw-bold'>Cualquiera puede empezar la partida</h3>
                   <br />
                   <div className='usuarios'>
                     {
@@ -181,10 +187,13 @@ export const SalaApp = () => {
                         </div>))
                     }
                   </div>
-                  <div className='cantidad'>
-                    <div>
-                      <i className="fa-solid fa-user"></i>
-                      <span>{usuarios ? usuarios.length : '0'}</span>
+                  <div className="d-flex justify-content-between mb-2">
+                    <button className='btn-empezar' onClick={() => cambiarNombre()}>Cambiar nombre</button>
+                    <div className='cantidad'>
+                      <div>
+                        <i className="fa-solid fa-user"></i>
+                        <span>{usuarios ? usuarios.length : '0'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -201,6 +210,7 @@ export const SalaApp = () => {
                   <br />
                   <h1 className='text-center'>Esperando a los demas...</h1>
                   <img src={imgEspera} alt="img-espera" className='img-fluid' />
+                  <p>Faltan responder: {numEspera == 1 ? cantidadPreguntas : cantidadRespuestas}</p>
                 </div>
               ) : ''
             }
@@ -209,10 +219,10 @@ export const SalaApp = () => {
                 <div className="card-home col-md-4">
                   <br />
                   {
-                    usuarios.map(user => (
-                      <div className='pregunta' key={user.id}>
-                        <p className='text-white'>{user.pregunta ? user.pregunta : 'Cargando..'}</p>
-                        <textarea onChange={(e) => obtenerRespuesta(user.id, e.target.value)} placeholder='Respuesta...'></textarea>
+                    preguntas.map(pregunta => (
+                      <div className='pregunta' key={pregunta.id}>
+                        <p className='text-white'>{pregunta.description}</p>
+                        <textarea onChange={(e) => obtenerRespuesta(pregunta.id, e.target.value)} placeholder='Respuesta...'></textarea>
                       </div>
                     ))
                   }
@@ -230,15 +240,15 @@ export const SalaApp = () => {
                   <h1 className="text-center text-white">RESULTADOS</h1>
                   <br />
                   {
-                    usuarios.map((user, i) => (
-                      <div key={user.id} className='box-question mt-2'>
+                    resultados.map((resultado, i) => (
+                      <div key={resultado.id} className='box-question mt-2'>
                         <div className='head-question'>
-                          {i + 1})  {user.pregunta}
+                          {i + 1})  {resultado.pregunta}
                         </div>
                         <div className='body-answers'>
                           {
-                            resultados.map((result, index) => (
-                              <span key={user.id + result[user.id] + index}>{result[user.id] ? `${result[user.id]}` : ''}</span>
+                            resultado.respuestas.map((result, index) => (
+                              <span key={index + result}>{result}</span>
                             ))
                           }
                         </div>

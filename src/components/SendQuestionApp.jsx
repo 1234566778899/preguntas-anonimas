@@ -9,7 +9,7 @@ export const SendQuestionApp = ({ sendQuestion }) => {
             <p>Realiza una pregunta anónima</p>
             <form onSubmit={handleSubmit(sendQuestion)}>
                 <textarea {...register('question', { required: true })} className='inp-pregunta'></textarea>
-                {errors.question && <p className='mt-1 alert alert-danger'>Debe completar este campo</p>}
+                {errors.question && <p className='mt-1 text-danger'>Debe completar este campo</p>}
                 <div className='mt-3 text-center'>
                     <button className='btn-continuar' type='submit'>Continuar</button>
                 </div>
