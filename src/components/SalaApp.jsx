@@ -237,7 +237,7 @@ export const SalaApp = () => {
               pantallas[5] ? (
                 <div className="col-md-4 my-2">
                   <br />
-                  <h1 className="text-center text-white">RESULTADOS</h1>
+                  <h3 className="text-center text-white">RESULTADOS</h3>
                   <br />
                   {
                     resultados.map((resultado, i) => (
