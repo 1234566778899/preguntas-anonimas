@@ -34,16 +34,16 @@ export const UserNameApp = () => {
           <div className="col-md-4"></div>
           <div className="col-md-4 p-1">
             <div className="card-home p-4">
-              <h3 className="text-center">EMPEZAR A JUEGAR</h3>
+              <h3 className="text-center">Empezar a jugar...</h3>
               <br />
               <form onSubmit={handleSubmit(enviarNombre)}>
-                <input className='inp-primary' {...register('name', { required: true })} type="text" placeholder='Ingrese su nombre...' />
+                <input className='inp-name' {...register('name', { required: true })} type="text" placeholder='Ingrese su nombre...' />
                 {
                   errors.name && <p className='alert alert-danger mt-1'>Campo obligatorio</p>
                 }
-                <button className='unirse mt-3'>CONTINUAR</button>
+                <button className='btn-continuar mt-3 w-100 py-2'>CONTINUAR</button>
               </form>
-              <button className='unirse mt-2' onClick={() => navigate('/home')}>SALIR</button>
+              <button className='btn-salir mt-2 w-100 py-2' onClick={() => navigate('/home')}>SALIR</button>
             </div>
           </div>
           <div className="col-md-4"></div>

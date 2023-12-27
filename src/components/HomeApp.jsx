@@ -27,7 +27,7 @@ export const HomeApp = () => {
     return (
         <>
             <div className="box-home">
-                <NavbarApp title={'PREGUNTAS ANÓNIMAS'} />
+                <NavbarApp title={'Juego de preguntas anónimas'} />
                 <div className="container">
                     <br />
                     <div className="row">
@@ -43,9 +43,9 @@ export const HomeApp = () => {
                                         }
                                     })} className='inp-primary' type="text" placeholder='Ingrese el código de la sala...' />
                                     {errors.code && <p className='text-danger mt-1'>Debe ingresar el código</p>}
-                                    <button className='unirse mt-2'><i className="me-2 fa-solid fa-right-to-bracket"></i>UNIRSE </button>
+                                    <button className='btn-continuar mt-2 w-100 py-2'><i className="me-2 fa-solid fa-right-to-bracket"></i>UNIRSE </button>
                                 </form>
-                                <button className='crear' onClick={() => crearSala()}>CREAR <i className="ms-2 fa-solid fa-circle-plus"></i></button>
+                                <button className='btn-salir w-100 py-2 mt-1' onClick={() => crearSala()}>CREAR <i className="ms-2 fa-solid fa-circle-plus"></i></button>
                             </div>
                         </div>
                         <div className="col-md-4"></div>

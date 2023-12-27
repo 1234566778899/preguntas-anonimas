@@ -56,50 +56,7 @@
     background-size: contain;
 }
 
-.inp-pregunta {
-    outline: none;
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid white;
-    background-color: #AC6C9C;
-    color: white;
-}
 
-.card-preguntar button {
-    background-color: white;
-}
-
-.btn-continuar {
-    background-color: #26890C;
-    border: none;
-    color: white;
-    padding: 7px 15px;
-    border-radius: 5px;
-}
-
-.pregunta {
-    border: 1px solid white;
-    margin-top: 10px;
-    border-radius: 10px;
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.pregunta textarea {
-    width: 100%;
-    outline: none;
-    border: none;
-    padding: 10px;
-    border-radius: 3px;
-    background-color: #4162C1;
-    border: 2px solid #88B0FA;
-    color: white;
-}
-
-.pregunta textarea::placeholder {
-    color: rgb(219, 219, 219);
-}
 
 .acordeon {
     background: none;
@@ -148,12 +105,10 @@
 .box-sala {
     height: 100vh;
     overflow-y: scroll;
-    background-image: linear-gradient(to bottom, #6928CF, #2EA3CF);
+    background-image: linear-gradient(180deg, #F74257 0%, #FC722A 100%);
 }
 
-.card-preguntar p {
-    color: white;
-}
+
 
 .info-toast {
     padding: 20px 0px;
@@ -189,8 +144,9 @@
 }
 
 .head-question {
-    background-color: rgba(0, 0, 0, 0.4);
-    padding: 10px 15px;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
 }
 
 .body-answers {
@@ -199,7 +155,57 @@
 
 .body-answers span {
     display: block;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 10px 15px;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+    background-color: #FCC1AE;
+    padding: 15px 15px;
+    color: black;
+    text-align: center;
+    border-radius: 20px;
+    margin-top: 5px;
+}
+
+.pregunta {
+    height: 160px;
+    padding: 2px;
+    margin-top: 15px;
+}
+
+.pregunta>p {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    padding-bottom: 40px;
+    color: black;
+    font-weight: 600;
+}
+
+.box-q {
+    padding: 10px;
+    background-color: #F5889B;
+    transform: translateY(-40px);
+    border-radius: 15px;
+    box-shadow: 0px 1px 1.8px 0px rgba(0, 0, 0, 0.25);
+}
+
+.pregunta textarea {
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    background: none;
+    color: #7e0022;
+}
+
+.pregunta textarea::placeholder {
+    color: #C9617D;
+    font-weight: bold;
+}
+
+.btn-send-answer {
+    border: none;
+    background-color: black;
+    color: white;
+    width: 100%;
+    padding: 10px 0px;
+    border-radius: 20px;
 }

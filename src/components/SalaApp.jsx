@@ -107,13 +107,13 @@ export const SalaApp = () => {
     else if (pantallas[1]) {
       setTitleNav('Pin del juego: ' + codigo);
     } else if (pantallas[2]) {
-      setTitleNav('Haz una pregunta');
+      setTitleNav('Realiza una pregunta');
     } else if (pantallas[3]) {
       setTitleNav('Esperando..')
     } else if (pantallas[4]) {
       setTitleNav('Responde a las preguntas...')
     } else {
-      setTitleNav('Respuestas anónimas');
+      setTitleNav('Respuestas');
     }
   }, [pantallas])
   const obtenerRespuesta = (key, value) => {
@@ -216,18 +216,20 @@ export const SalaApp = () => {
             }
             {
               pantallas[4] ? (
-                <div className="card-home col-md-4">
+                <div className="col-md-4">
                   <br />
                   {
                     preguntas.map(pregunta => (
                       <div className='pregunta' key={pregunta.id}>
-                        <p className='text-white'>{pregunta.description}</p>
-                        <textarea onChange={(e) => obtenerRespuesta(pregunta.id, e.target.value)} placeholder='Respuesta...'></textarea>
+                        <p >{pregunta.description}</p>
+                        <div className='box-q'>
+                          <textarea onChange={(e) => obtenerRespuesta(pregunta.id, e.target.value)} placeholder='Respuesta...'></textarea>
+                        </div>
                       </div>
                     ))
                   }
                   <div className="text-center">
-                    <button className='mt-2 px-5' onClick={() => enviarRespuestas()}>Enviar</button>
+                    <button className='mt-4 px-5 btn-send-answer' onClick={() => enviarRespuestas()}>Enviar</button>
                   </div>
                   <br />
                 </div>
@@ -235,15 +237,14 @@ export const SalaApp = () => {
             }
             {
               pantallas[5] ? (
-                <div className="col-md-4 my-2">
+                <div className="col-md-4">
                   <br />
-                  <h3 className="text-center text-white">RESULTADOS</h3>
                   <br />
                   {
                     resultados.map((resultado, i) => (
                       <div key={resultado.id} className='box-question mt-2'>
                         <div className='head-question'>
-                          {i + 1})  {resultado.pregunta}
+                          {resultado.pregunta}
                         </div>
                         <div className='body-answers'>
                           {
@@ -257,7 +258,7 @@ export const SalaApp = () => {
                   }
 
                   <div className="text-center">
-                    <button className='mt-2 btn-first' onClick={() => iniciarNuevo()}>Iniciar de nuevo</button>
+                    <button className='mt-4 btn-first' onClick={() => iniciarNuevo()}>Iniciar de nuevo</button>
                   </div>
                 </div>
               ) : ''
