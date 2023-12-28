@@ -220,7 +220,7 @@ export const SalaApp = () => {
                   <br />
                   {
                     preguntas.map(pregunta => (
-                      <div className='pregunta' key={pregunta.id}>
+                      <div className='pregunta mt-5' key={pregunta.id}>
                         <p >{pregunta.description}</p>
                         <div className='box-q'>
                           <textarea onChange={(e) => obtenerRespuesta(pregunta.id, e.target.value)} placeholder='Respuesta...'></textarea>
@@ -229,7 +229,7 @@ export const SalaApp = () => {
                     ))
                   }
                   <div className="text-center">
-                    <button className='mt-4 px-5 btn-send-answer' onClick={() => enviarRespuestas()}>Enviar</button>
+                    <button className='mt-5 px-5 btn-send-answer' onClick={() => enviarRespuestas()}>Enviar</button>
                   </div>
                   <br />
                 </div>
