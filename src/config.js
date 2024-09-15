@@ -1,4 +1,4 @@
 export const CONFI = {
-    uri: 'preguntas.azurewebsites.net'
-    //uri: 'http://localhost:5000'
+    uri: 'https://preguntas-dedre5hpe2guhah5.eastus-01.azurewebsites.net'
+    // uri: 'http://localhost:4000'
 }
